@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AutoShield UI</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Small overrides for this page */
+        
+        .nav-tabs {
+            top: 60px;
+        }
+        
+        .container {
+            margin-top: 140px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="matrix-bg" id="matrix"></div>
+    <div class="scanline"></div>
+
+    <nav class="site-nav">
+        <a class="site-link" href="index.html">Home</a>
+        <a class="site-link" href="autoshieldui.html">AutoShield UI</a>
+    </nav>
+
+    <div class="nav-tabs">
+        <a class="nav-tab active" href="#dashboard">📊 DASHBOARD</a>
+        <a class="nav-tab" href="#threats">🚨 THREATS</a>
+        <a class="nav-tab" href="#agents">🤖 AGENTS</a>
+        <a class="nav-tab" href="#analytics">📈 ANALYTICS</a>
+        <a class="nav-tab" href="#patterns">🧠 PATTERNS</a>
+        <a class="nav-tab" href="#system">💻 SYSTEM</a>
+    </div>
+
+    <!-- Popup Overlay -->
+    <div class="popup-overlay" id="popupOverlay">
+        <div class="popup-alert" id="popupAlert">
+            <div class="popup-header" id="popupHeader"></div>
+            <div class="popup-content" id="popupContent"></div>
+            <div class="popup-risk" id="popupRisk"></div>
+            <button class="popup-close" onclick="closePopup()">ACKNOWLEDGE</button>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="container">
+        <!-- DASHBOARD TAB -->
+        <div id="dashboard" class="tab-content active">
+            <header>
+                <h1>🛡️ AUTOSHIELD COMMAND CENTER</h1>
+                <p class="subtitle">Advanced AI-Powered Cybersecurity System</p>
+                <div class="system-info">
+                    <span id="hostnameDisplay">Hostname: Loading...</span>
+                    <span id="osDisplay">OS: Loading...</span>
+                    <span id="statusDisplay">Status: ACTIVE</span>
+                </div>
+            </header>
+
+            <div class="button-group" style="justify-content:center; margin-bottom:20px">
+                <button class="btn btn-primary" onclick="openAutoShieldUI()">Open AutoShield UI</button>
+                <button class="btn btn-warning" onclick="showToast('Investigating...')">Investigate</button>
+                <button class="btn btn-danger" onclick="showPopup('Critical Alert','Immediate action required','High')">Trigger Alert</button>
+            </div>
+
+            <!-- Statistics -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon">📝</div>
+                    <div class="stat-value" id="totalLogs">0</div>
+                    <div class="stat-label">Total Logs</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">⚠️</div>
+                    <div class="stat-value" id="totalAlerts">0</div>
+                    <div class="stat-label">Alerts Generated</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🛑</div>
+                    <div class="stat-value" id="threatsBlocked">0</div>
+                    <div class="stat-label">Threats Blocked</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">💚</div>
+                    <div class="stat-value" id="systemsHealed">0</div>
+                    <div class="stat-label">Systems Healed</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon">🧠</div>
+                    <div class="stat-value" id="patternsLearned">0</div>
+                    <div class="stat-label">Patterns Learned</div>
+                </div>
+            </div>
+
+            <!-- Real-time Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">📊 CPU USAGE</div>
+                    <div class="resource-meter">
+                        <div class="resource-label">
+                            <span>CPU</span>
+                            <span id="cpuPercent">0%</span>
+                        </div>
+                        <div class="resource-bar">
+                            <div class="resource-fill" id="cpuBar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">🧠 AI PATTERN LEARNING</div>
+                    <div class="chart-canvas" style="height:140px">
+                        <div class="chart-bar" style="left:10%; width:10%; height:20%"></div>
+                        <div class="chart-bar" style="left:25%; width:10%; height:40%"></div>
+                        <div class="chart-bar" style="left:40%; width:10%; height:60%"></div>
+                        <div class="chart-bar" style="left:55%; width:10%; height:30%"></div>
+                        <div class="chart-bar" style="left:70%; width:10%; height:80%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- THREATS TAB -->
+        <div id="threats" class="tab-content">
+            <header>
+                <h1>🚨 THREAT INTELLIGENCE</h1>
+                <p class="subtitle">Real-time Threat Detection & Response</p>
+            </header>
+
+            <!-- Threat Map -->
+            <div class="threat-map">
+                <h2 style="color:#00d9ff; text-align:center; margin-bottom:20px">ACTIVE THREATS</h2>
+                <div class="threat-item">
+                    <div class="threat-info">
+                        <strong>Brute Force Attack</strong><br> IP: 192.168.1.100 | Attempts: 15
+                    </div>
+                    <div class="threat-badge critical">CRITICAL</div>
+                </div>
+                <div class="threat-item">
+                    <div class="threat-info">
+                        <strong>Suspicious Process</strong><br> Process: malware.exe | PID: 1234
+                    </div>
+                    <div class="threat-badge high">HIGH</div>
+                </div>
+                <div class="threat-item blocked">
+                    <div class="threat-info">
+                        <strong>Blocked Threat</strong><br> IP: 10.0.0.5 | Action: Firewall Block
+                    </div>
+                    <div class="threat-badge blocked">BLOCKED</div>
+                </div>
+            </div>
+
+            <!-- Live Feed -->
+            <div class="live-feed">
+                <h2 style="color:#00d9ff; text-align:center; margin-bottom:15px">LIVE THREAT FEED</h2>
+                <div class="feed-item">🔴 [14:32:15] Suspicious login attempt from 192.168.1.100</div>
+                <div class="feed-item">🟡 [14:31:42] High CPU usage detected - Process: system.exe</div>
+                <div class="feed-item">🟢 [14:30:18] Threat neutralized - IP blocked</div>
+                <div class="feed-item">🔴 [14:29:55] Malware signature detected in memory</div>
+            </div>
+        </div>
+
+        <!-- AGENTS TAB -->
+        <div id="agents" class="tab-content">
+            <header>
+                <h1>🤖 AI AGENTS</h1>
+                <p class="subtitle">Autonomous Cybersecurity Agents</p>
+            </header>
+
+            <!-- Agent Cards -->
+            <div class="agents-grid">
+                <!-- Sentinel Agent -->
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <span class="agent-name">🔍 SENTINEL</span>
+                        <span class="agent-status">ACTIVE</span>
+                    </div>
+                    <button class="reset-button" onclick="resetLogs()">🔄 RESET LOGS</button>
+                    <div class="agent-content" id="sentinelLogs">
+                        <div style="text-align: center; color: #00d9ff;">
+                            <div class="loading"></div>
+                            <p>Initializing monitoring systems...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Analyst Agent -->
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <span class="agent-name">🧠 ANALYST</span>
+                        <span class="agent-status">ACTIVE</span>
+                    </div>
+                    <div class="agent-content" id="analystAlerts">
+                        <div style="text-align: center; color: #00d9ff;">
+                            <div class="loading"></div>
+                            <p>Analyzing threat patterns...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Responder Agent -->
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <span class="agent-name">⚔️ RESPONDER</span>
+                        <span class="agent-status">ACTIVE</span>
+                    </div>
+                    <div class="agent-content" id="responderActions">
+                        <div style="text-align: center; color: #00d9ff;">
+                            <div class="loading"></div>
+                            <p>Standing by for threats...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Healer Agent -->
+                <div class="agent-card">
+                    <div class="agent-header">
+                        <span class="agent-name">💚 HEALER</span>
+                        <span class="agent-status">ACTIVE</span>
+                    </div>
+                    <div class="agent-content" id="healerActions">
+                        <div style="text-align: center; color: #00d9ff;">
+                            <div class="loading"></div>
+                            <p>System recovery ready...</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ANALYTICS TAB -->
+        <div id="analytics" class="tab-content">
+            <header>
+                <h1>📈 ANALYTICS & INSIGHTS</h1>
+                <p class="subtitle">Advanced Threat Analysis & Reporting</p>
+            </header>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <div class="chart-header">📊 THREAT TRENDS</div>
+                    <div class="chart-canvas">
+                        <div class="chart-bar" style="left:10%; width:8%; height:30%"></div>
+                        <div class="chart-bar" style="left:20%; width:8%; height:50%"></div>
+                        <div class="chart-bar" style="left:30%; width:8%; height:70%"></div>
+                        <div class="chart-bar" style="left:40%; width:8%; height:40%"></div>
+                        <div class="chart-bar" style="left:50%; width:8%; height:60%"></div>
+                        <div class="chart-bar" style="left:60%; width:8%; height:80%"></div>
+                        <div class="chart-bar" style="left:70%; width:8%; height:45%"></div>
+                        <div class="chart-bar" style="left:80%; width:8%; height:55%"></div>
+                        <div class="chart-bar" style="left:90%; width:8%; height:35%"></div>
+                    </div>
+                </div>
+
+                <div class="chart-card">
+                    <div class="chart-header">🛡️ SYSTEM PERFORMANCE</div>
+                    <div class="chart-canvas">
+                        <div class="chart-bar" style="left:10%; width:8%; height:20%"></div>
+                        <div class="chart-bar" style="left:20%; width:8%; height:25%"></div>
+                        <div class="chart-bar" style="left:30%; width:8%; height:40%"></div>
+                        <div class="chart-bar" style="left:40%; width:8%; height:35%"></div>
+                        <div class="chart-bar" style="left:50%; width:8%; height:50%"></div>
+                        <div class="chart-bar" style="left:60%; width:8%; height:45%"></div>
+                        <div class="chart-bar" style="left:70%; width:8%; height:60%"></div>
+                        <div class="chart-bar" style="left:80%; width:8%; height:55%"></div>
+                        <div class="chart-bar" style="left:90%; width:8%; height:30%"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PATTERNS TAB -->
+        <div id="patterns" class="tab-content">
+            <header>
+                <h1>🧠 AI PATTERN RECOGNITION</h1>
+                <p class="subtitle">Machine Learning Threat Detection</p>
+            </header>
+
+            <!-- Pattern Grid -->
+            <div class="pattern-grid">
+                <div class="pattern-card">
+                    <div class="pattern-header">🔍 Brute Force Pattern</div>
+                    <div class="pattern-detail">Confidence: 95%</div>
+                    <div class="pattern-detail">Occurrences: 12</div>
+                    <div class="pattern-detail">Last Seen: 2 min ago</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-header">💻 System Anomaly</div>
+                    <div class="pattern-detail">Confidence: 87%</div>
+                    <div class="pattern-detail">Occurrences: 8</div>
+                    <div class="pattern-detail">Last Seen: 5 min ago</div>
+                </div>
+                <div class="pattern-card">
+                    <div class="pattern-header">🌐 Network Scan</div>
+                    <div class="pattern-detail">Confidence: 92%</div>
+                    <div class="pattern-detail">Occurrences: 15</div>
+                    <div class="pattern-detail">Last Seen: 1 min ago</div>
+                </div>
+            </div>
+
+            <!-- Network Graph -->
+            <div class="network-graph">
+                <div class="network-node" style="top:20%; left:30%"></div>
+                <div class="network-node threat" style="top:40%; left:60%"></div>
+                <div class="network-node" style="top:60%; left:20%"></div>
+                <div class="network-node" style="top:70%; left:70%"></div>
+                <div class="network-node threat" style="top:30%; left:80%"></div>
+            </div>
+        </div>
+
+        <!-- SYSTEM TAB -->
+        <div id="system" class="tab-content">
+            <header>
+                <h1>💻 SYSTEM MONITORING</h1>
+                <p class="subtitle">Real-time System Resources & Health</p>
+            </header>
+
+            <!-- System Resources -->
+            <div class="resource-meter">
+                <div class="resource-label">
+                    <span>CPU Usage</span>
+                    <span id="cpuPercentSys">0%</span>
+                </div>
+                <div class="resource-bar">
+                    <div class="resource-fill" id="cpuBarSys" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="resource-meter">
+                <div class="resource-label">
+                    <span>Memory Usage</span>
+                    <span id="memPercent">0%</span>
+                </div>
+                <div class="resource-bar">
+                    <div class="resource-fill" id="memBar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="resource-meter">
+                <div class="resource-label">
+                    <span>Disk Usage</span>
+                    <span id="diskPercent">0%</span>
+                </div>
+                <div class="resource-bar">
+                    <div class="resource-fill" id="diskBar" style="width: 0%"></div>
+                </div>
+            </div>
+
+            <div class="resource-meter">
+                <div class="resource-label">
+                    <span>Network I/O</span>
+                    <span id="netPercent">0%</span>
+                </div>
+                <div class="resource-bar">
+                    <div class="resource-fill" id="netBar" style="width: 0%"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // site-link active state + nav-tab interactions to match index.html behavior
+        document.addEventListener('DOMContentLoaded', function() {
+            const links = document.querySelectorAll('.site-link');
+            links.forEach(l => {
+                if (l.getAttribute('href') === window.location.pathname.split('/').pop()) {
+                    l.style.color = '#00d9ff';
+                    l.style.borderBottom = '2px solid #00d9ff';
+                }
+            });
+
+            // simple nav-tab active toggling (anchors with hashes)
+            const tabs = document.querySelectorAll('.nav-tab');
+            tabs.forEach(tab => {
+                tab.addEventListener('click', function(e) {
+                    // if it's an anchor with hash, prevent default and toggle active
+                    e.preventDefault();
+                    tabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>
